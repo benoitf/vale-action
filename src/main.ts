@@ -17,6 +17,7 @@ const {GITHUB_TOKEN, GITHUB_WORKSPACE} = process.env;
 export async function run(actionInput: input.Input): Promise<void> {
   try {
     const startedAt = new Date().toISOString();
+    console.info('before execa run', actionInput.args);
     const alertResp = await execa('vale', actionInput.args);
     console.info('alertResp is', alertResp);
 
@@ -39,6 +40,7 @@ export async function run(actionInput: input.Input): Promise<void> {
       context: {vale: actionInput.version}
     });
   } catch (error) {
+    console.log('there was a failure', error);
     core.setFailed(error.stderr);
   }
 }
