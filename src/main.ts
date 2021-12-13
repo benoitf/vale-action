@@ -18,9 +18,11 @@ export async function run(actionInput: input.Input): Promise<void> {
   try {
     const startedAt = new Date().toISOString();
     const alertResp = await execa('vale', actionInput.args);
+    console.info('alertResp is', alertResp);
 
     let runner = new CheckRunner(actionInput.files);
 
+    
     let sha = github.context.sha;
     if (github.context.payload.pull_request) {
       sha = github.context.payload.pull_request.head.sha;

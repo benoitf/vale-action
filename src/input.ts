@@ -118,13 +118,17 @@ export async function get(tmp: any, tok: string, dir: string): Promise<Input> {
 
     let names = new Set<string>();
     payload.forEach(file => {
+      console.log('check if file exists', file.name);
       if (fs.existsSync(file.name)) {
         names.add(file.name);
         modified[file.name] = file;
+        console.log('Adding names files', JSON.stringify(names, undefined, 2));
+        console.log('Adding modified files', JSON.stringify(modified, undefined, 2));
       }
     });
 
     args = args.concat(Array.from(names));
+    console.log('args is', args);
   } else if (files == 'all') {
     args.push('.');
   } else if (fs.existsSync(path.resolve(dir, files))) {
