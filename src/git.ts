@@ -29,6 +29,7 @@ export function wasLineAddedInPR(file: GHFile, line: number): boolean {
 export async function modifiedFiles(): Promise<GHFile[]> {
   let files: GHFile[] = [];
   let commits: string[] = await getCommits();
+  console.info('modifiedFiles: the list of commits are', commits);
 
   if (CTX.payload.repository) {
     const repo = CTX.payload.repository;
@@ -64,7 +65,7 @@ export async function modifiedFiles(): Promise<GHFile[]> {
 
 async function getCommits(): Promise<string[]> {
   let commits: string[] = [];
-  console.info('payload for getCommits ', JSON.stringify(CTX.payload, undefined, 2));
+  // console.info('payload for getCommits ', JSON.stringify(CTX.payload, undefined, 2));
 
   switch (CTX.eventName) {
     case 'pull_request':
@@ -77,7 +78,7 @@ async function getCommits(): Promise<string[]> {
           owner: repo.owner.login || repo.owner.name,
           repo: repo.name
         });
-
+        console.info('response is', resp.data);
         resp.data.forEach((commit: {sha: string}) => {
           commits.push(commit.sha);
         });
