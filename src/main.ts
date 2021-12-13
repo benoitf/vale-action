@@ -48,7 +48,7 @@ async function main(): Promise<void> {
 
     const tmpobj = tmp.fileSync({postfix: '.ini', dir: workspace});
     const actionInput = await input.get(tmpobj, userToken, workspace);
-    console.log('action Input is', actionInput);
+    console.info('action Input is', actionInput);
     await run(actionInput);
 
     tmpobj.removeCallback();

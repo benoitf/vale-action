@@ -63,6 +63,7 @@ export async function modifiedFiles(): Promise<GHFile[]> {
 
 async function getCommits(): Promise<string[]> {
   let commits: string[] = [];
+  console.info('payload for getCommits ', JSON.stringify(CTX.payload, undefined, 2));
 
   switch (CTX.eventName) {
     case 'pull_request':
@@ -86,7 +87,6 @@ async function getCommits(): Promise<string[]> {
       }
       break;
     case 'pull_request_target':
-      console.log('payload for pull request target is', JSON.stringify(CTX.payload.pull_request_target, undefined, 2));
       if (CTX.payload.pull_request_target && CTX.payload.repository) {
         const url = CTX.payload.pull_request_target.commits_url;
         const repo = CTX.payload.repository;
