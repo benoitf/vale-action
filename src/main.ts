@@ -18,11 +18,19 @@ export async function run(actionInput: input.Input): Promise<void> {
   try {
     const startedAt = new Date().toISOString();
     console.info('before execa run', actionInput.args);
-    const alertResp = await execa('vale', actionInput.args);
-    console.info('alertResp is', alertResp);
+    const valeProcess=  execa('vale', actionInput.args);
+    console.info('valeProcess is', valeProcess);
+    
+    if (valeProcess.stdout) {
+      valeProcess.stdout.pipe(process.stdout);
+    }
+    if (valeProcess.stderr) {
+      valeProcess.stderr.pipe(process.stderr);
+    }
 
     let runner = new CheckRunner(actionInput.files);
 
+    const alertResp = await valeProcess;
     
     let sha = github.context.sha;
     if (github.context.payload.pull_request) {
