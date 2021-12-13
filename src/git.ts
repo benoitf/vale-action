@@ -43,6 +43,7 @@ export async function modifiedFiles(): Promise<GHFile[]> {
         });
 
         resp.data.files.forEach(file => {
+          console.log('checking the file', file);
           if (file.status == 'modified' || file.status == 'added') {
             let entry: GHFile = {
               name: file.filename,
@@ -57,7 +58,7 @@ export async function modifiedFiles(): Promise<GHFile[]> {
   } else {
     core.error('Repo not set');
   }
-
+  console.log('returning files', JSON.stringify(files, undefined, 2));
   return files;
 }
 
@@ -80,6 +81,7 @@ async function getCommits(): Promise<string[]> {
         resp.data.forEach((commit: {sha: string}) => {
           commits.push(commit.sha);
         });
+        console.info('the list of commits are', commits);
       } else {
         core.warning(`Unable to retrieve PR info.`);
         core.warning(
