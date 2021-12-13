@@ -67,6 +67,7 @@ async function getCommits(): Promise<string[]> {
 
   switch (CTX.eventName) {
     case 'pull_request':
+    case 'pull_request_target':
       if (CTX.payload.pull_request && CTX.payload.repository) {
         const url = CTX.payload.pull_request.commits_url;
         const repo = CTX.payload.repository;
@@ -77,26 +78,6 @@ async function getCommits(): Promise<string[]> {
         });
 
         resp.data.forEach((commit: {sha: string}) => {
-          commits.push(commit.sha);
-        });
-      } else {
-        core.warning(`Unable to retrieve PR info.`);
-        core.warning(
-          `PR: ${CTX.payload.pull_request}, Repo: ${CTX.payload.repository}`
-        );
-      }
-      break;
-    case 'pull_request_target':
-      if (CTX.payload.pull_request_target && CTX.payload.repository) {
-        const url = CTX.payload.pull_request_target.commits_url;
-        const repo = CTX.payload.repository;
-
-        const resp = await API.request(`GET ${url}`, {
-          owner: repo.owner.login || repo.owner.name,
-          repo: repo.name
-        });
-
-        resp.data.forEach((commit: { sha: string }) => {
           commits.push(commit.sha);
         });
       } else {
