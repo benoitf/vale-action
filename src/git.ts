@@ -85,7 +85,28 @@ async function getCommits(): Promise<string[]> {
         );
       }
       break;
-    case 'push':
+    case 'pull_request_target':
+      console.log('payload for pull request target is', JSON.stringify(CTX.payload.pull_request_target, undefined, 2));
+      if (CTX.payload.pull_request_target && CTX.payload.repository) {
+        const url = CTX.payload.pull_request_target.commits_url;
+        const repo = CTX.payload.repository;
+
+        const resp = await API.request(`GET ${url}`, {
+          owner: repo.owner.login || repo.owner.name,
+          repo: repo.name
+        });
+
+        resp.data.forEach((commit: { sha: string }) => {
+          commits.push(commit.sha);
+        });
+      } else {
+        core.warning(`Unable to retrieve PR info.`);
+        core.warning(
+          `PR: ${CTX.payload.pull_request}, Repo: ${CTX.payload.repository}`
+        );
+      }
+      break;
+      case 'push':
       CTX.payload.commits.forEach((commit: {id: string}) => {
         commits.push(commit.id);
       });
