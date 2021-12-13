@@ -29,14 +29,16 @@ export async function run(actionInput: input.Input): Promise<void> {
     }
 
     let runner = new CheckRunner(actionInput.files);
-
+    console.log('checkrunner is on');
     const alertResp = await valeProcess;
-    
+    console.log('after valeProcess is done');
+
     let sha = github.context.sha;
     if (github.context.payload.pull_request) {
       sha = github.context.payload.pull_request.head.sha;
     }
 
+    console.log('runner.makeAnnotations');
     runner.makeAnnotations(alertResp.stdout);
     await runner.executeCheck({
       token: actionInput.token,

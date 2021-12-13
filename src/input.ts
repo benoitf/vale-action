@@ -66,6 +66,7 @@ export async function get(tmp: any, tok: string, dir: string): Promise<Input> {
         core.warning(`Failed to fetch remote config: ${error}.`);
       })
       .then(body => {
+        console.log('will use the body', body);
         try {
           fs.writeFileSync(tmp.name, body);
           logIfDebug(`Successfully fetched remote config.`);
